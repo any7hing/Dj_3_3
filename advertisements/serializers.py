@@ -46,16 +46,18 @@ class AdvertisementSerializer(serializers.ModelSerializer):
         if self.context["request"].method == 'POST':
             if len(Advertisement.objects.filter(creator__id = self.context["request"].user.id) & Advertisement.objects.filter(status='OPEN')) > 5:
                 raise ValidationError('Превышен лимит открытых обьявлений, максимум = 5')
-
+        # if self.context["request"].method == 'GET':
+        #     data = Advertisement.objects.filter(creator = self.context["request"].user) & Advertisement.objects.filter(status='DRAFT')
+            
         return data
     
 class FavoritesSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
+    # user = UserSerializer(read_only=True)
     advertisement = AdvertisementSerializer(read_only=True)
     
     class Meta:
         model = Favorites
-        fields = ('id', 'user' , 'advertisement')
+        fields = ('id' , 'advertisement')
         
     def validate(self, data):
         if Advertisement.objects.get(id=data['advertisement'].id).creator == data['user']:

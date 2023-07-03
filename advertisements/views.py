@@ -5,7 +5,7 @@ from rest_framework.decorators import action
 from advertisements.models import Advertisement, Favorites
 from advertisements.permissions import IsOwner
 from advertisements.serializers import AdvertisementSerializer, FavoritesSerializer
-from django.http.response import HttpResponse
+from rest_framework.response import Response
 from django.contrib.auth.models import User
 
 class AdvertisementViewSet(ModelViewSet):
@@ -17,7 +17,6 @@ class AdvertisementViewSet(ModelViewSet):
         """Получение прав для действий."""
         if self.action in ["create", "update", "partial_update", 'destroy']:
             return [IsOwner()]
-            
         return []
     
 
@@ -29,17 +28,17 @@ class AdvertisementViewSet(ModelViewSet):
             serializer = FavoritesSerializer(data=validated_data)
             serializer.validate(data=validated_data)
             serializer.create(validated_data)
-            return HttpResponse ('Вроде получилось')
+            return Response ('Вроде получилось')
 
     
     @action(detail=True,methods=['DELETE'], url_path='delete', permission_classes=[IsAuthenticated, IsOwner() ])
     def delete_favorites_posts(self, request, pk):
-            # serializer_class = FavoritesSerializer
+            
             Favorites.objects.get(advertisement__id = pk).delete()
-            return HttpResponse ('Удалено...наверное')
+            return Response ('Удалено...наверное')
     
-    @action(detail=True, methods=['GET'], url_path='favorites_posts' )
-    def show_favorites_posts(self, request,pk):
+    @action(detail=False, methods=['GET'], url_path='favorites_posts', permission_classes=[IsAuthenticated])
+    def show_favorites_posts(self, request):
         queryset = Favorites.objects.filter(user=request.user)
-        serializer_class = FavoritesSerializer
-        return HttpResponse(queryset)
+        serializer = FavoritesSerializer(queryset,many=True)
+        return Response(serializer.data)
