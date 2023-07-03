@@ -29,5 +29,17 @@ class AdvertisementViewSet(ModelViewSet):
             serializer = FavoritesSerializer(data=validated_data)
             serializer.validate(data=validated_data)
             serializer.create(validated_data)
-        return HttpResponse ('Вроде получилось')
+            return HttpResponse ('Вроде получилось')
 
+    
+    @action(detail=True,methods=['DELETE'], url_path='delete', permission_classes=[IsAuthenticated, IsOwner() ])
+    def delete_favorites_posts(self, request, pk):
+            # serializer_class = FavoritesSerializer
+            Favorites.objects.get(advertisement__id = pk).delete()
+            return HttpResponse ('Удалено...наверное')
+    
+    @action(detail=True, methods=['GET'], url_path='favorites_posts' )
+    def show_favorites_posts(self, request,pk):
+        queryset = Favorites.objects.filter(user=request.user)
+        serializer_class = FavoritesSerializer
+        return HttpResponse(queryset)

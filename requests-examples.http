@@ -49,3 +49,12 @@ Authorization: Token dcce6622344a4b1e6642050e52336283a254328d
 GET {{baseUrl}}/advertisements/1/favorites
 Content-Type: application/json
 Authorization: Token 8bdfc96077c98f9378e6fe936c637f127d474c51
+
+###
+DELETE {{baseUrl}}/advertisements/1/delete/
+Authorization: Token 8bdfc96077c98f9378e6fe936c637f127d474c51
+
+###
+GET {{baseUrl}}/advertisements/2/favorites_posts
+Content-Type: application/json
+Authorization: Token 8bdfc96077c98f9378e6fe936c637f127d474c51
