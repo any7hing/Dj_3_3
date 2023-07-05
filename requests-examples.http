@@ -43,12 +43,12 @@ GET {{baseUrl}}/advertisements/?created_at_before=2020-10-01
 Content-Type: application/json
 
 ### добавить в избранное
-GET {{baseUrl}}/advertisements/1/favorites
+GET {{baseUrl}}/advertisements/3/favorites
 Content-Type: application/json
 Authorization: Token 8bdfc96077c98f9378e6fe936c637f127d474c51
 
 ### удалить избранное
-DELETE {{baseUrl}}/advertisements/1/delete/
+DELETE {{baseUrl}}/advertisements/3/delete/
 Authorization: Token 8bdfc96077c98f9378e6fe936c637f127d474c51
 
 ### получить список избранных обьяв
